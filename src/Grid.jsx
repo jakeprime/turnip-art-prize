@@ -1,40 +1,14 @@
+import { useContext } from "react";
 import styles from "./Grid.module.css";
-import amaranth from "./images/crops/Amaranth_Stage_5.png";
-import collie from "./images/crops/Cauliflower_Stage_6.png";
-import melon from "./images/crops/Melon_Stage_6.png";
-import powderMelon from "./images/crops/Powdermelon_Stage_6.png";
-import pumpkin from "./images/crops/Pumpkin_Stage_6.png";
-import redCabbage from "./images/crops/Red_Cabbage_Stage_6.png";
-import rhubarb from "./images/crops/Rhubarb_Stage_6.png";
-import sunflower from "./images/crops/Sunflower_Stage_5.png";
-import wheat from "./images/crops/Wheat_Stage_5.png";
+import { Context } from "./App";
 
-const ROWS = 10;
-const COLS = 12;
+const Grid = () => {
+  const { grid, setGrid, selectedCrop } = useContext(Context);
 
-export default () => {
-  const crops = [
-    amaranth,
-    collie,
-    melon,
-    powderMelon,
-    pumpkin,
-    redCabbage,
-    rhubarb,
-    sunflower,
-    wheat,
-  ];
-
-  const grid = [];
-  for (let i = 0; i < ROWS; i++) {
-    grid.push([]);
-    for (let j = 0; j < COLS; j++) {
-      grid[i].push(undefined);
-    }
-  }
-
-  const randomCrop = () => {
-    return crops[Math.floor(Math.random() * crops.length)];
+  const plantCrop = (i, j) => {
+    const newGrid = grid.map((row) => row.map((cell) => cell));
+    newGrid[i][j] = selectedCrop;
+    setGrid(newGrid);
   };
 
   return (
@@ -42,8 +16,8 @@ export default () => {
       {grid.map((row, i) => (
         <div className={styles.row}>
           {row.map((cell, j) => (
-            <div className={styles.cell}>
-              <img className={styles.crop} src={randomCrop()} />
+            <div className={styles.cell} onClick={() => plantCrop(i, j)}>
+              <img className={styles.crop} src={cell} alt="" />
             </div>
           ))}
         </div>
@@ -51,3 +25,5 @@ export default () => {
     </div>
   );
 };
+
+export default Grid;
